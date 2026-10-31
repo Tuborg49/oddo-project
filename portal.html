@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brightloop - Customer Self-Service Portal</title>
+  <style>
+    :root {
+      --bg-color: #f8f5fc;
+      --card-bg: #ffffff;
+      --primary-lilac: #9b72cf;
+      --primary-hover: #8655c6;
+      --light-lilac: #f3ebfc;
+      --text-dark: #2d2638;
+      --text-muted: #7a7289;
+      --border-color: #e6ddf2;
+      --success-green: #2e7d32;
+      --success-bg: #e8f5e9;
+      --warning-orange: #ed6c02;
+      --warning-bg: #fff3e0;
+      --danger-red: #d32f2f;
+      --danger-bg: #ffebee;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Navbar */
+    .portal-navbar {
+      height: 70px; background-color: var(--card-bg); border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+      position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(155, 114, 207, 0.04);
+    }
+    .brand-group { display: flex; align-items: center; gap: 12px; }
+    .logo-mark { width: 38px; height: 38px; border-radius: 50%; border: 4px solid var(--primary-lilac); display: flex; align-items: center; justify-content: center; background: var(--light-lilac); }
+    .logo-mark-inner { width: 14px; height: 14px; border-radius: 50%; background-color: var(--primary-lilac); }
+    .brand-title { font-size: 19px; font-weight: 700; }
+    .client-badge { font-size: 11px; font-weight: 700; background: var(--light-lilac); color: var(--primary-lilac); padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
+
+    .nav-actions { display: flex; align-items: center; gap: 16px; }
+    .switch-view-btn { font-size: 13px; font-weight: 600; color: var(--primary-lilac); text-decoration: none; background: #fff; border: 1.5px solid var(--border-color); padding: 7px 14px; border-radius: 20px; transition: all 0.2s; }
+    .switch-view-btn:hover { background: var(--light-lilac); border-color: var(--primary-lilac); }
+    .profile-pill { display: flex; align-items: center; gap: 10px; background: var(--light-lilac); border: 1px solid var(--border-color); padding: 5px 14px; border-radius: 30px; }
+    .avatar-circle { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-lilac), var(--primary-hover)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .company-name { font-size: 13px; font-weight: 600; }
+
+    /* Layout */
+    .portal-container { max-width: 1180px; width: 100%; margin: 0 auto; padding: 36px 24px; flex-grow: 1; }
+    .hero-banner { background: #fff; border: 1.5px solid var(--border-color); border-radius: 20px; padding: 32px 36px; margin-bottom: 32px; box-shadow: 0 8px 24px rgba(155, 114, 207, 0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .hero-text h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .hero-text p { font-size: 14px; color: var(--text-muted); }
+    .hero-stats { display: flex; gap: 24px; }
+    .hero-stat-card { background: #ffffff; border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 12px; text-align: right; }
+    .hero-stat-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .hero-stat-val { font-size: 22px; font-weight: 800; color: var(--primary-lilac); margin-top: 4px; }
+
+    .portal-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 28px; }
+    @media (max-width: 900px) { .portal-grid { grid-template-columns: 1fr; } }
+
+    .portal-card { background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 28px; box-shadow: 0 6px 20px rgba(155, 114, 207, 0.05); margin-bottom: 28px; }
+    .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-title { font-size: 18px; font-weight: 700; }
+
+    .sub-hero-box { border: 1.5px solid var(--light-lilac); background: #fbf9ff; border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+    .sub-title { font-size: 18px; font-weight: 700; }
+    .sub-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .price-pill { font-size: 20px; font-weight: 800; color: var(--primary-lilac); }
+    .sub-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Buttons */
+    .btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-lilac), var(--primary-hover)); color: #fff; box-shadow: 0 4px 12px rgba(155, 114, 207, 0.25); }
+    .btn-primary:hover { opacity: 0.95; transform: translateY(-1px); }
+    .btn-outline { background: #fff; border: 1.5px solid var(--border-color); color: var(--text-dark); }
+    .btn-outline:hover { background: var(--light-lilac); border-color: var(--primary-lilac); color: var(--primary-hover); }
+    .btn-danger { background: #fff; border: 1.5px solid #ffcdd2; color: var(--danger-red); }
+    .btn-danger:hover { background: var(--danger-bg); border-color: var(--danger-red); }
+
+    /* Add-on Switch Controls */
+    .addon-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--border-color); }
+    .addon-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .addon-info h4 { font-size: 14px; font-weight: 700; }
+    .addon-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .addon-price { font-weight: 700; font-size: 13px; color: var(--primary-lilac); margin-right: 14px; }
+
+    .switch-control { display: flex; align-items: center; }
+    .toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1c7de; transition: 0.3s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--primary-lilac); }
+    input:checked + .slider:before { transform: translateX(22px); }
+
+    /* Tables */
+    .table-container { border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th { background-color: var(--light-lilac); color: var(--text-dark); padding: 12px 18px; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+    td { padding: 14px 18px; border-bottom: 1px solid var(--border-color); }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .badge-paid { background: var(--success-bg); color: var(--success-green); }
+    .badge-due { background: var(--warning-bg); color: var(--warning-orange); }
+    .badge-overdue { background: var(--danger-bg); color: var(--danger-red); }
+
+    /* Promo code */
+    .promo-input-group { display: flex; gap: 10px; margin-top: 14px; }
+    .promo-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border-color); border-radius: 8px; font-size: 13px; outline: none; background: #faf8fd; }
+    .promo-input:focus { border-color: var(--primary-lilac); background: #fff; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(45, 38, 56, 0.45); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 120; }
+    .modal-card { background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 18px; width: 100%; max-width: 580px; padding: 32px; box-shadow: 0 20px 45px rgba(155, 114, 207, 0.25); }
+    .invoice-printable { padding: 20px; border: 1px dashed var(--primary-lilac); border-radius: 12px; background: #fdfaff; margin-bottom: 20px; }
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 1.5px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; }
+
+    #toast-notification { position: fixed; bottom: 24px; right: 24px; background: var(--card-bg); border: 1.5px solid var(--primary-lilac); border-radius: 12px; padding: 14px 22px; box-shadow: 0 10px 30px rgba(155, 114, 207, 0.25); display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; z-index: 200; transform: translateY(120%); transition: transform 0.3s; }
+    #toast-notification.show { transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <header class="portal-navbar">
+    <div class="brand-group">
+      <div class="logo-mark"><div class="logo-mark-inner"></div></div>
+      <div class="brand-title">Brightloop</div>
+      <span class="client-badge">Customer Portal</span>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" class="switch-view-btn">⚙️ Open Admin Console</a>
+      <div class="profile-pill">
+        <div class="avatar-circle">AL</div>
+        <span class="company-name">Acme Logistics Corp</span>
+      </div>
+      <a href="index.html" title="Log Out" style="text-decoration:none; font-size:18px;">🚪</a>
+    </div>
+  </header>
+
+  <main class="portal-container">
+    <section class="hero-banner">
+      <div class="hero-text">
+        <h1>Welcome, Acme Logistics</h1>
+        <p>Manage your business software licenses, billing cycles, and add-on modules without having to email anyone.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat-card">
+          <div class="hero-stat-label">Contract Status</div>
+          <div class="hero-stat-val" style="color:var(--success-green);">ACTIVE</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-label">Next Scheduled Bill</div>
+          <div class="hero-stat-val" id="portal-next-bill">$1,810</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="portal-grid">
+      <div class="col-main">
+
+        <!-- 1. Subscription Overview -->
+        <div class="portal-card">
+          <div class="card-head">
+            <h2 class="card-title">Your Current Subscription</h2>
+            <span class="status-badge badge-paid" id="sub-status-badge">Active &bull; Auto-Renews</span>
+          </div>
+          <div class="sub-hero-box">
+            <div>
+              <div class="sub-title">Brightloop ERP Core (Odoo Brand Edition)</div>
+              <div class="sub-meta">Billed Annually &bull; 10 Enterprise Seats &bull; Next renewal: Nov 4, 2026</div>
+            </div>
+            <div class="price-pill">$1,760.00 / yr</div>
+          </div>
+          <div class="sub-actions">
+            <button class="btn btn-outline" onclick="handlePauseSubscription()">⏸️ Pause Subscription</button>
+            <button class="btn btn-outline" onclick="handleRenewEarly()">🔄 Renew Contract Early</button>
+            <button class="btn btn-danger" onclick="handleCancelPlan()">Close Subscription</button>
+          </div>
+        </div>
+
+        <!-- 2. Interactive Add-On Toggles (Odoo Prompt Scene) -->
+        <div class="portal-card">
+          <div class="card-head">
+            <div>
+              <h2 class="card-title">Optional Feature Add-Ons</h2>
+              <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Switch modules on or off anytime. Automatically updates your next billing cycle.</p>
+            </div>
+          </div>
+          <div class="addon-item">
+            <div class="addon-info">
+              <h4>Cloud Storage Booster (1TB)</h4>
+              <p>Automated cloud document backups and high-speed attachments.</p>
+            </div>
+            <div class="switch-control">
+              <span class="addon-price">+$50.00 / mo</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addon-storage" checked onchange="toggleAddon('Cloud Storage (1TB)', 50, this.checked)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="addon-item">
+            <div class="addon-info">
+              <h4>Automation Cron Engine</h4>
+              <p>Automates scheduled reports and trigger-based system webhooks.</p>
+            </div>
+            <div class="switch-control">
+              <span class="addon-price">+$300.00 / mo</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="addon-cron" onchange="toggleAddon('Automation Cron Engine', 300, this.checked)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Invoices & Receipts -->
+        <div class="portal-card">
+          <div class="card-head">
+            <h2 class="card-title">Invoices & Payment Receipts</h2>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Invoice #</th><th>Date</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="portal-invoices-body">
+                <tr>
+                  <td><strong>INV-2026-01</strong></td>
+                  <td>Oct 01, 2026</td>
+                  <td><strong>$2,076.80</strong></td>
+                  <td><span class="status-badge badge-paid">PAID</span></td>
+                  <td><button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPrintableInvoice('INV-2026-01', '$2,076.80', 'PAID')">View Receipt</button></td>
+                </tr>
+                <tr>
+                  <td><strong>INV-2026-02</strong></td>
+                  <td>Oct 15, 2026</td>
+                  <td><strong>$354.00</strong></td>
+                  <td><span class="status-badge badge-due">DUE SOON</span></td>
+                  <td><button class="btn btn-primary" style="padding:4px 8px; font-size:11px;" onclick="payInvoiceNow('INV-2026-02', 354.00)">Pay Online</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Promo code, payment card, security -->
+      <div class="col-side">
+        <div class="portal-card">
+          <h3 class="card-title" style="font-size:16px;">Have a Promo Code?</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Discounts will automatically reduce your upcoming renewal bill.</p>
+          <div class="promo-input-group">
+            <input type="text" id="promo-code" class="promo-input" placeholder="e.g. BRIGHT20" />
+            <button class="btn btn-primary" onclick="applyPromoCode()">Apply</button>
+          </div>
+          <div id="promo-status" style="font-size:12px; margin-top:8px; display:none;"></div>
+        </div>
+
+        <div class="portal-card">
+          <h3 class="card-title" style="font-size:16px;">Primary Payment Method</h3>
+          <div style="display:flex; align-items:center; gap:12px; margin: 16px 0;">
+            <div style="font-size:26px;">💳</div>
+            <div>
+              <div style="font-size:13px; font-weight:700;">Corporate Visa &bull;&bull;&bull;&bull; 4821</div>
+              <div style="font-size:11px; color:var(--text-muted);">Expires 09/2028 &bull; Default</div>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%; justify-content:center;" onclick="showToast('Payment method update form opened')">Update Card</button>
+        </div>
+
+        <div class="portal-card">
+          <h3 class="card-title" style="font-size:16px;">Account Security</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin-top:4px;">Reset password via email link (>8 chars, uppercase, lowercase, special char).</p>
+          <button class="btn btn-outline" style="width:100%; justify-content:center; margin-top:14px;" onclick="sendPasswordResetEmail()">Send Password Reset Email</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Printable Invoice Receipt Modal -->
+  <div class="modal-overlay" id="invoice-modal">
+    <div class="modal-card">
+      <div class="inv-header">
+        <div>
+          <h3 style="font-size:18px; font-weight:800; color:var(--primary-lilac);">Brightloop Software</h3>
+          <p style="font-size:11px; color:var(--text-muted);">Official Tax Invoice & Receipt</p>
+        </div>
+        <div style="text-align:right;">
+          <h4 id="modal-inv-id" style="font-size:14px; font-weight:700;">INV-2026-01</h4>
+          <span class="status-badge badge-paid">PAID</span>
+        </div>
+      </div>
+      <div class="invoice-printable">
+        <div style="font-size:12px; margin-bottom:12px;">
+          <strong>Billed To:</strong> Acme Logistics Corp<br />
+          <strong>VAT/Tax ID:</strong> US-994820194<br />
+          <strong>Issue Date:</strong> Oct 01, 2026
+        </div>
+        <table style="font-size:12px;">
+          <thead><tr><th>Description</th><th>Qty</th><th>Amount</th></tr></thead>
+          <tbody>
+            <tr><td>Brightloop ERP Core (Odoo Brand Edition)</td><td>1</td><td>$1,760.00</td></tr>
+            <tr><td>Standard Tax (18% GST/VAT)</td><td>-</td><td>$316.80</td></tr>
+          </tbody>
+        </table>
+        <div style="text-align:right; margin-top:14px; font-size:15px; font-weight:800;">
+          Total Paid: <span id="modal-inv-total" style="color:var(--primary-lilac);">$2,076.80</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn btn-outline" onclick="closeModal('invoice-modal')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-notification">
+    <span style="font-size: 18px;">✨</span>
+    <span id="toast-text">Portal Updated</span>
+  </div>
+
+  <script>
+    let basePrice = 1760;
+    let addonTotal = 50;
+
+    function updateBillPreview() {
+      const grandTotal = basePrice + addonTotal;
+      document.getElementById('portal-next-bill').textContent = `$${grandTotal.toLocaleString()}`;
+    }
+
+    function toggleAddon(name, price, isEnabled) {
+      if (isEnabled) {
+        addonTotal += price;
+        showToast(`Added ${name} (+$${price}/mo) to next bill.`);
+      } else {
+        addonTotal -= price;
+        showToast(`Removed ${name}. Next bill adjusted.`);
+      }
+      updateBillPreview();
+    }
+
+    function handlePauseSubscription() {
+      const badge = document.getElementById('sub-status-badge');
+      if (badge.textContent.includes('PAUSED')) {
+        badge.textContent = 'Active • Auto-Renews';
+        badge.className = 'status-badge badge-paid';
+        showToast('Subscription resumed!');
+      } else {
+        badge.textContent = 'PAUSED • Will Not Bill';
+        badge.className = 'status-badge badge-due';
+        showToast('Subscription paused. You will not be billed next cycle.');
+      }
+    }
+
+    function handleRenewEarly() { showToast('Renewal confirmed for 1 year!'); }
+    function handleCancelPlan() {
+      if (confirm('Cancel your Brightloop subscription?')) {
+        const badge = document.getElementById('sub-status-badge');
+        badge.textContent = 'CANCELLED';
+        badge.className = 'status-badge badge-overdue';
+        showToast('Subscription cancelled.');
+      }
+    }
+
+    function applyPromoCode() {
+      const code = document.getElementById('promo-code').value.trim().toUpperCase();
+      const status = document.getElementById('promo-status');
+      if (code === 'BRIGHT20' || code === 'GROWTH20') {
+        status.style.display = 'block';
+        status.style.color = 'var(--success-green)';
+        status.textContent = '✓ 20% discount applied to upcoming bill!';
+        basePrice = basePrice * 0.8;
+        updateBillPreview();
+        showToast('Promo code applied!');
+      } else {
+        status.style.display = 'block';
+        status.style.color = 'var(--danger-red)';
+        status.textContent = 'Invalid or expired promo code.';
+      }
+    }
+
+    function sendPasswordResetEmail() { showToast('Reset link sent to billing@acmelogistics.com!'); }
+
+    function payInvoiceNow(invId, amount) {
+      showToast(`Processing payment of $${amount}...`);
+      setTimeout(() => {
+        const tbody = document.getElementById('portal-invoices-body');
+        tbody.innerHTML = `
+          <tr><td><strong>INV-2026-01</strong></td><td>Oct 01, 2026</td><td><strong>$2,076.80</strong></td><td><span class="status-badge badge-paid">PAID</span></td><td><button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPrintableInvoice('INV-2026-01', '$2,076.80', 'PAID')">View Receipt</button></td></tr>
+          <tr><td><strong>${invId}</strong></td><td>Oct 15, 2026</td><td><strong>$${amount.toFixed(2)}</strong></td><td><span class="status-badge badge-paid">PAID</span></td><td><button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="viewPrintableInvoice('${invId}', '$${amount.toFixed(2)}', 'PAID')">View Receipt</button></td></tr>
+        `;
+        showToast(`Invoice ${invId} paid successfully!`);
+      }, 700);
+    }
+
+    function viewPrintableInvoice(invId, total, status) {
+      document.getElementById('modal-inv-id').textContent = invId;
+      document.getElementById('modal-inv-total').textContent = total;
+      document.getElementById('invoice-modal').style.display = 'flex';
+    }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showToast(msg) {
+      const t = document.getElementById('toast-notification');
+      document.getElementById('toast-text').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3200);
+    }
+  </script>
+</body>
+</html>
