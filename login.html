@@ -6,7 +6,7 @@
   <title>Brightloop Subscription Management System</title>
   <style>
     :root {
-      --bg-color: #f8f5fc;
+      --bg-color: #f7f4fc;
       --card-bg: #ffffff;
       --primary-lilac: #9b72cf;
       --primary-hover: #8655c6;
@@ -39,7 +39,7 @@
     }
 
     /* -------------------------------------------------------------
-       INTERFACE 1: SPLASH SCREEN (7 Seconds Auto Transition)
+       INTERFACE 1: LOGO SPLASH SCREEN (7 Seconds Auto Transition)
     ------------------------------------------------------------- */
     #splash-screen {
       display: flex;
@@ -58,8 +58,8 @@
     }
 
     .logo-mark {
-      width: 90px;
-      height: 90px;
+      width: 95px;
+      height: 95px;
       border-radius: 50%;
       border: 6px solid var(--primary-lilac);
       display: flex;
@@ -67,24 +67,24 @@
       justify-content: center;
       margin-bottom: 24px;
       background: #ffffff;
-      box-shadow: 0 0 30px var(--accent-glow);
+      box-shadow: 0 0 35px var(--accent-glow);
       animation: pulseGlow 2s infinite alternate;
     }
 
     @keyframes pulseGlow {
       0% { transform: scale(1); box-shadow: 0 0 15px var(--accent-glow); }
-      100% { transform: scale(1.05); box-shadow: 0 0 35px rgba(155, 114, 207, 0.4); }
+      100% { transform: scale(1.06); box-shadow: 0 0 40px rgba(155, 114, 207, 0.45); }
     }
 
     .logo-mark-inner {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background-color: var(--primary-lilac);
     }
 
     .app-title {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 800;
       color: var(--text-dark);
       letter-spacing: -0.5px;
@@ -94,7 +94,7 @@
     }
 
     .progress-bar-container {
-      width: 180px;
+      width: 190px;
       height: 6px;
       background-color: var(--border-color);
       border-radius: 3px;
@@ -107,7 +107,6 @@
       width: 0%;
       background: linear-gradient(90deg, var(--primary-lilac), var(--primary-hover));
       border-radius: 3px;
-      /* Set exactly to 7 seconds duration */
       animation: fillProgress 7s linear forwards;
     }
 
@@ -117,7 +116,7 @@
     }
 
     /* -------------------------------------------------------------
-       INTERFACE 2: LOGIN SCREEN
+       INTERFACE 2: STREAMLINED LOGIN SCREEN
     ------------------------------------------------------------- */
     #login-wrapper {
       display: flex;
@@ -126,19 +125,18 @@
       min-height: 100vh;
       padding: 20px;
       background: radial-gradient(circle at top right, var(--light-lilac), transparent 50%),
-                  radial-gradient(circle at bottom left, #f3ebfc, transparent 50%);
+                  radial-gradient(circle at bottom left, #efe6fa, transparent 50%);
     }
 
     .login-card {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 20px;
-      padding: 44px 36px;
+      padding: 40px 32px;
       box-shadow: 0 20px 40px rgba(155, 114, 207, 0.12);
       text-align: center;
-      transform: translateY(0);
       transition: transform 0.3s ease;
     }
 
@@ -150,7 +148,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .login-logo-mark {
@@ -173,7 +171,7 @@
     }
 
     .login-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--text-dark);
     }
@@ -191,9 +189,672 @@
       margin-bottom: 8px;
     }
 
-    .form-group input, .form-group select {
+    .form-group input {
       width: 100%;
       padding: 13px 16px;
       border: 1.5px solid var(--border-color);
       border-radius: 10px;
       font-size: 14px;
+      outline: none;
+      transition: all 0.25s ease;
+      background-color: #faf8fd;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-lilac);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 4px var(--accent-glow);
+    }
+
+    .btn-proceed {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-lilac), var(--primary-hover));
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      margin-top: 10px;
+      box-shadow: 0 4px 15px rgba(155, 114, 207, 0.3);
+    }
+
+    .btn-proceed:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(155, 114, 207, 0.4);
+    }
+
+    .message {
+      margin-top: 16px;
+      font-size: 13px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .message.error { color: var(--danger-red); }
+    .message.success { color: var(--success-green); }
+
+    /* -------------------------------------------------------------
+       SHARED DASHBOARD COMPONENTS
+    ------------------------------------------------------------- */
+    .dashboard-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--bg-color);
+    }
+
+    .top-navbar {
+      height: 70px;
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 10px rgba(155, 114, 207, 0.03);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-dark);
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .menu-btn:hover {
+      background-color: var(--light-lilac);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 19px;
+      color: var(--text-dark);
+    }
+
+    .nav-logo-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-lilac);
+      background: var(--light-lilac);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--light-lilac);
+      border: 1px solid var(--border-color);
+      padding: 6px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .profile-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-lilac), var(--primary-hover));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .profile-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(155, 114, 207, 0.15);
+      width: 180px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .dropdown-menu button {
+      padding: 12px 18px;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    .dropdown-menu button:hover {
+      background-color: var(--light-lilac);
+    }
+
+    .dashboard-body {
+      display: flex;
+      flex: 1;
+    }
+
+    .sidebar {
+      width: 260px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-nav-item {
+      padding: 13px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-nav-item:hover, .sidebar-nav-item.active {
+      background-color: var(--light-lilac);
+      color: var(--primary-hover);
+      transform: translateX(4px);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 36px;
+      background-color: var(--bg-color);
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+      margin-bottom: 36px;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 6px 20px rgba(155, 114, 207, 0.05);
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-val {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 10px;
+      color: var(--text-dark);
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(155, 114, 207, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: var(--light-lilac);
+      color: var(--text-dark);
+      padding: 16px 22px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    td {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-dark);
+    }
+
+    .status-badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-active { background: #e8f5e9; color: var(--success-green); }
+    .badge-confirmed { background: #e3f2fd; color: #1976d2; }
+    .badge-draft { background: #fff3e0; color: var(--warning-orange); }
+
+    .btn-action {
+      padding: 9px 18px;
+      background: linear-gradient(135deg, var(--primary-lilac), var(--primary-hover));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Customer Portal Specifics */
+    .portal-content {
+      max-width: 900px;
+      margin: 40px auto;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .portal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 20px rgba(155, 114, 207, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================================
+       INTERFACE 1: LOGO SPLASH SCREEN (7 Seconds Auto Transition)
+  ============================================================= -->
+  <div id="splash-screen">
+    <div class="logo-mark">
+      <div class="logo-mark-inner"></div>
+    </div>
+    <h1 class="app-title">Brightloop</h1>
+    <div class="progress-bar-container">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       INTERFACE 2: CLEAN LOGIN SCREEN
+  ============================================================= -->
+  <div id="login-wrapper">
+    <div class="login-card">
+      <div class="login-logo-container">
+        <div class="login-logo-mark">
+          <div class="login-logo-mark-inner"></div>
+        </div>
+        <h2 class="login-title">Brightloop</h2>
+      </div>
+
+      <form id="login-form" onsubmit="handleProceed(event)">
+        <div class="form-group">
+          <label for="login-id">Username / Login ID</label>
+          <input type="text" id="login-id" placeholder="Enter username or email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required />
+        </div>
+
+        <button type="submit" class="btn-proceed">Proceed</button>
+        
+        <div id="status-message" class="message"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       ADMIN DASHBOARD (Redirects if username contains @admin)
+  ============================================================= -->
+  <div id="admin-dashboard" class="dashboard-container hidden">
+    <div class="top-navbar">
+      <div class="nav-left">
+        <button class="menu-btn" onclick="toggleSidebar('admin-sidebar')">☰</button>
+        <div class="nav-brand">
+          <div class="nav-logo-small"></div>
+          <span>Brightloop Admin Control Panel</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="profile-btn" onclick="toggleDropdown('admin-dropdown')">
+          <div class="profile-avatar">AD</div>
+          <span class="profile-name">Administrator</span>
+          <span style="font-size:10px; color:var(--text-muted);">▼</span>
+        </div>
+        <div id="admin-dropdown" class="dropdown-menu">
+          <button onclick="alert('Admin Profile Settings')">Profile Settings</button>
+          <button onclick="logout()" style="color: var(--danger-red);">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="sidebar" id="admin-sidebar">
+        <div class="sidebar-nav-item active" onclick="switchTab('admin', 'overview', this)">📊 System Overview</div>
+        <div class="sidebar-nav-item" onclick="switchTab('admin', 'products', this)">📦 Products & Variants (+Odoo)</div>
+        <div class="sidebar-nav-item" onclick="switchTab('admin', 'plans', this)">📋 Plans & Tax Rules</div>
+        <div class="sidebar-nav-item" onclick="switchTab('admin', 'users', this)">👥 Staff & User Control</div>
+      </div>
+
+      <div class="main-content">
+        <div id="admin-sec-overview" class="content-section active">
+          <div class="section-header"><h2 class="section-title">Admin Financial & System Overview</h2></div>
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="metric-label">Active Subscriptions</div><div class="metric-val">1,248</div></div>
+            <div class="metric-card"><div class="metric-label">Monthly Recurring Revenue</div><div class="metric-val">$84,500</div></div>
+            <div class="metric-card"><div class="metric-label">Overdue Balances</div><div class="metric-val">$1,200</div></div>
+          </div>
+        </div>
+
+        <div id="admin-sec-products" class="content-section">
+          <div class="section-header"><h2 class="section-title">Product Catalog & Variant Configuration</h2><button class="btn-action">+ Add Product</button></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Product Name</th><th>Sales Price</th><th>Variant (Brand)</th><th>Modifier</th></tr></thead>
+              <tbody>
+                <tr><td>Brightloop ERP Core</td><td>$1,200 / yr</td><td>Odoo Edition</td><td>+$560</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="admin-sec-plans" class="content-section">
+          <div class="section-header"><h2 class="section-title">Subscription Plans & Global Taxes</h2><button class="btn-action">+ Create Plan</button></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Plan Name</th><th>Billing Frequency</th><th>Auto-Close</th></tr></thead>
+              <tbody>
+                <tr><td>Enterprise Growth</td><td>Monthly</td><td>Enabled</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="admin-sec-users" class="content-section">
+          <div class="section-header"><h2 class="section-title">User & Staff Account Management</h2><button class="btn-action">+ Add Staff Member</button></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Email</th><th>Role</th><th>Access Level</th></tr></thead>
+              <tbody>
+                <tr><td>admin@brightloop.com</td><td>ADMIN</td><td>Full System Control</td></tr>
+                <tr><td>staff@brightloop.com</td><td>STAFF</td><td>Day-to-day Operations</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       STAFF DASHBOARD (Redirects if username contains @staff)
+  ============================================================= -->
+  <div id="staff-dashboard" class="dashboard-container hidden">
+    <div class="top-navbar">
+      <div class="nav-left">
+        <button class="menu-btn" onclick="toggleSidebar('staff-sidebar')">☰</button>
+        <div class="nav-brand">
+          <div class="nav-logo-small" style="border-color: var(--warning-orange);"></div>
+          <span>Brightloop Staff Workspace</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="profile-btn" onclick="toggleDropdown('staff-dropdown')">
+          <div class="profile-avatar" style="background:var(--warning-orange);">ST</div>
+          <span class="profile-name">Internal Staff</span>
+          <span style="font-size:10px; color:var(--text-muted);">▼</span>
+        </div>
+        <div id="staff-dropdown" class="dropdown-menu">
+          <button onclick="alert('Staff Profile')">My Profile</button>
+          <button onclick="logout()" style="color: var(--danger-red);">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="sidebar" id="staff-sidebar">
+        <div class="sidebar-nav-item active" onclick="switchTab('staff', 'quotes', this)">📑 Quotes & Contracts</div>
+        <div class="sidebar-nav-item" onclick="switchTab('staff', 'subscriptions', this)">🔁 Subscriptions Lifecycle</div>
+        <div class="sidebar-nav-item" onclick="switchTab('staff', 'invoices', this)">💳 Invoices & Payments</div>
+      </div>
+
+      <div class="main-content">
+        <div id="staff-sec-quotes" class="content-section active">
+          <div class="section-header"><h2 class="section-title">Sales Quotations & Templates</h2><button class="btn-action">+ Generate Quote[span_0](start_span)[span_0](end_span)</button></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Quote #</th><th>Customer</th><th>Template</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>QT-2026-088</td><td>Starlight Inc</td><td>Standard SaaS Quote</td><td><span class="status-badge badge-draft">Draft</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="staff-sec-subscriptions" class="content-section">
+          <div class="section-header"><h2 class="section-title">Subscription Lifecycle Tracker</h2></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Sub #</th><th>Customer</th><th>Plan</th><th>State Machine Status</th></tr></thead>
+              <tbody>
+                <tr><td>SUB-2026-102</td><td>Acme Corp</td><td>Enterprise Growth</td><td><span class="status-badge badge-active">Active</span></td></tr>
+                <tr><td>SUB-2026-103</td><td>GlobalTech</td><td>Micro-Billing</td><td><span class="status-badge badge-confirmed">Confirmed</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="staff-sec-invoices" class="content-section">
+          <div class="section-header"><h2 class="section-title">Invoices & Payment Recording</h2><button class="btn-action">Record Payment</button></div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Invoice #</th><th>Subscription #</th><th>Grand Total</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>INV-3091</td><td>SUB-2026-102</td><td>$1,320.00</td><td><span class="status-badge badge-active">PAID</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       CUSTOMER / USER PORTAL (Redirects for standard usernames)
+  ============================================================= -->
+  <div id="user-dashboard" class="dashboard-container hidden">
+    <div class="top-navbar">
+      <div class="nav-left">
+        <div class="nav-brand">
+          <div class="nav-logo-small"></div>
+          <span>Brightloop Customer Portal</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="profile-btn" onclick="logout()">
+          <div class="profile-avatar" style="background:#7a7289;">US</div>
+          <span class="profile-name">My Account (Logout)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-content">
+      <div class="section-header">
+        <h2 class="section-title">Welcome to Your Customer Portal</h2>
+      </div>
+
+      <div class="portal-card">
+        <h3 style="margin-bottom: 12px; color: var(--primary-hover);">My Active Subscriptions</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">View your active subscriptions, license keys, and billing cycles.</p>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Subscription Plan</th><th>Billing Cycle</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Enterprise Growth Plan</td><td>Monthly</td><td><span class="status-badge badge-active">Active</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="portal-card">
+        <h3 style="margin-bottom: 12px; color: var(--primary-hover);">My Invoices & Billing History</h3>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>INV-2026-891</td><td>$450.00</td><td><span class="status-badge badge-active">PAID</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       JAVASCRIPT ROUTING & INTERACTION LOGIC
+  ============================================================= -->
+  <script>
+    // 1. Splash Screen Auto-Transition after exactly 7 Seconds (7000 ms)
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      splash.style.opacity = '0';
+      setTimeout(() => {
+        splash.classList.add('hidden');
+      }, 600);
+    }, 7000);
+
+    // 2. Login & Dynamic Routing Handler based on Username/Login ID input
+    function handleProceed(event) {
+      event.preventDefault();
+
+      const loginId = document.getElementById('login-id').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const statusMsg = document.getElementById('status-message');
+
+      if (!loginId || !password) {
+        statusMsg.textContent = 'Please provide both Username and Password.';
+        statusMsg.className = 'message error';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      statusMsg.textContent = 'Verifying credentials...';
+      statusMsg.className = 'message success';
+      statusMsg.style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('login-wrapper').classList.add('hidden');
+        
+        // Automatic routing based on username keywords
+        if (loginId.includes('@admin')) {
+          document.getElementById('admin-dashboard').classList.remove('hidden');
+        } else if (loginId.includes('@staff')) {
+          document.getElementById('staff-dashboard').classList.remove('hidden');
+        } else {
+          document.getElementById('user-dashboard').classList.remove('hidden');
+        }
+      }, 500);
+    }
+
+    // 3. Dropdown Menu Toggle
+    function toggleDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // 4. Tab Switcher
+    function switchTab(role, tabId, element) {
+      const sections = document.querySelectorAll(`#${role}-dashboard .content-section`);
+      sections.forEach(sec => sec.classList.remove('active'));
+
+      const items = document.querySelectorAll(`#${role}-sidebar .sidebar-nav-item`);
+      items.forEach(item => item.classList.remove('active'));
+
+      document.getElementById(`${role}-sec-${tabId}`).classList.add('active');
+      element.classList.add('active');
+    }
+
+    // 5. Sidebar Toggle
+    function toggleSidebar(sidebarId) {
+      const sidebar = document.getElementById(sidebarId);
+      sidebar.style.display = sidebar.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    // 6. Logout Handler
+    function logout() {
+      document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
+      document.getElementById('admin-dashboard').classList.add('hidden');
+      document.getElementById('staff-dashboard').classList.add('hidden');
+      document.getElementById('user-dashboard').classList.add('hidden');
+      document.getElementById('login-wrapper').classList.remove('hidden');
+      document.getElementById('status-message').style.display = 'none';
+      document.getElementById('login-form').reset();
+    }
+  </script>
+</body>
+</html>
