@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brightloop Software</title>
+  <style>
+    :root {
+      --bg-color: #fcfaff;
+      --card-bg: #ffffff;
+      --primary-lilac: #9b72cf;
+      --primary-hover: #8655c6;
+      --light-lilac: #f3ebfc;
+      --text-dark: #2d2638;
+      --text-muted: #7a7289;
+      --border-color: #e6ddf2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    /* Screen 1: Splash Screen */
+    #splash-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+
+    .logo-mark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 8px solid var(--primary-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      background: var(--light-lilac);
+      box-shadow: 0 8px 24px rgba(155, 114, 207, 0.15);
+    }
+
+    .logo-mark-inner {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--primary-lilac);
+    }
+
+    .app-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .progress-bar-container {
+      width: 160px;
+      height: 4px;
+      background-color: var(--light-lilac);
+      border-radius: 2px;
+      margin-top: 30px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--primary-lilac);
+      animation: fillProgress 5s linear forwards;
+    }
+
+    @keyframes fillProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* Screen 2: Login Screen */
+    #login-screen {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      width: 100%;
+    }
+
+    .login-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 30px rgba(155, 114, 207, 0.08);
+      text-align: center;
+    }
+
+    .login-logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo-mark {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 6px solid var(--primary-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      background: var(--light-lilac);
+    }
+
+    .login-logo-mark-inner {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: var(--primary-lilac);
+    }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      background-color: #faf8fd;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-lilac);
+      background-color: #ffffff;
+    }
+
+    .btn-proceed {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-lilac);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-proceed:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .message {
+      margin-top: 16px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .message.error {
+      color: #d93838;
+    }
+
+    .message.success {
+      color: #2e7d32;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Interface 1: Splash Screen -->
+  <div id="splash-screen">
+    <div class="logo-mark">
+      <div class="logo-mark-inner"></div>
+    </div>
+    <h1 class="app-title">Brightloop</h1>
+    <div class="progress-bar-container">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Interface 2: Login Screen -->
+  <div class="container">
+    <div id="login-screen">
+      <div class="login-card">
+        <div class="login-logo-container">
+          <div class="login-logo-mark">
+            <div class="login-logo-mark-inner"></div>
+          </div>
+          <h2 class="login-title">Brightloop</h2>
+        </div>
+
+        <form id="login-form" onsubmit="handleProceed(event)">
+          <div class="form-group">
+            <label for="login-id">Login ID</label>
+            <input type="text" id="login-id" placeholder="Enter your Login ID" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required />
+          </div>
+
+          <button type="submit" class="btn-proceed">Proceed</button>
+          
+          <div id="status-message" class="message"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Automatic transition after 5 seconds
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      const login = document.getElementById('login-screen');
+
+      splash.style.opacity = '0';
+      
+      setTimeout(() => {
+        splash.classList.add('hidden');
+        login.style.display = 'block';
+        setTimeout(() => {
+          login.style.opacity = '1';
+        }, 50);
+      }, 500);
+    }, 5000);
+
+    // Form submission & verification handler
+    function handleProceed(event) {
+      event.preventDefault();
+      
+      const loginId = document.getElementById('login-id').value.trim();
+      const password = document.getElementById('password').value;
+      const statusMsg = document.getElementById('status-message');
+
+      if (!loginId || !password) {
+        statusMsg.textContent = 'Please fill in both Login ID and Password.';
+        statusMsg.className = 'message error';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      // Verification Simulation
+      statusMsg.textContent = 'Verifying credentials...';
+      statusMsg.className = 'message success';
+      statusMsg.style.display = 'block';
+
+      setTimeout(() => {
+        alert('Credentials verified successfully!');
+      }, 500);
+    }
+  </script>
+</body>
+</html>
+

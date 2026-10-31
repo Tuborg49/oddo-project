@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brightloop Software - Subscription Management Hub</title>
+  <style>
+    :root {
+      --bg-color: #fcfaff;
+      --card-bg: #ffffff;
+      --primary-lilac: #9b72cf;
+      --primary-hover: #8655c6;
+      --light-lilac: #f3ebfc;
+      --text-dark: #2d2638;
+      --text-muted: #7a7289;
+      --border-color: #e6ddf2;
+      --success-green: #2e7d32;
+      --success-bg: #e8f5e9;
+      --warning-orange: #e65100;
+      --warning-bg: #fff3e0;
+      --danger-red: #c62828;
+      --danger-bg: #ffebee;
+      --info-blue: #1565c0;
+      --info-bg: #e3f2fd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      width: 250px;
+      background: var(--card-bg);
+      border-right: 1.5px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 20;
+    }
+
+    .brand {
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 4px solid var(--primary-lilac);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--light-lilac);
+    }
+
+    .logo-mark-inner {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: var(--primary-lilac);
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .nav-menu {
+      list-style: none;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background-color: var(--light-lilac);
+      color: var(--primary-lilac);
+    }
+
+    .nav-item.active {
+      font-weight: 700;
+    }
+
+    .user-profile-widget {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #faf8fd;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-lilac);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .user-info { flex-grow: 1; }
+    .user-name { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+    .user-role-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--light-lilac);
+      color: var(--primary-lilac);
+      text-transform: uppercase;
+    }
+
+    /* Main Content */
+    main {
+      margin-left: 250px;
+      flex-grow: 1;
+      padding: 28px 36px;
+      max-width: 1300px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .page-heading h1 { font-size: 24px; font-weight: 700; color: var(--text-dark); }
+    .page-heading p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .role-switcher-select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-color);
+      background: #fff;
+      font-size: 13px;
+      color: var(--text-dark);
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary { background-color: var(--primary-lilac); color: #fff; }
+    .btn-primary:hover { background-color: var(--primary-hover); }
+    .btn-secondary { background: #fff; border: 1.5px solid var(--border-color); color: var(--text-dark); }
+    .btn-secondary:hover { background: var(--light-lilac); border-color: var(--primary-lilac); color: var(--primary-lilac); }
+
+    .btn-simulator {
+      background: linear-gradient(135deg, #9b72cf, #7042a6);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(155, 114, 207, 0.35);
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(155, 114, 207, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(155, 114, 207, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(155, 114, 207, 0); }
+    }
+
+    /* KPI Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(155, 114, 207, 0.05);
+    }
+
+    .metric-title { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+    .metric-value { font-size: 26px; font-weight: 700; color: var(--text-dark); }
+    .metric-footer { margin-top: 10px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .footer-green { color: var(--success-green); }
+    .footer-red { color: var(--danger-red); }
+    .footer-purple { color: var(--primary-lilac); }
+
+    /* Tables & Cards */
+    .content-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(155, 114, 207, 0.06);
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .card-title { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+
+    .input-search {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      background: #faf8fd;
+      width: 220px;
+    }
+
+    .input-search:focus { border-color: var(--primary-lilac); background: #fff; }
+
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th {
+      background: #fcf9ff;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+      padding: 12px 20px;
+      border-bottom: 1.5px solid var(--border-color);
+      text-transform: uppercase;
+    }
+    td { padding: 14px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-dark); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background-color: #faf7ff; }
+
+    /* Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-active { background: var(--success-bg); color: var(--success-green); }
+    .badge-confirmed { background: var(--info-bg); color: var(--info-blue); }
+    .badge-quotation { background: var(--warning-bg); color: var(--warning-orange); }
+    .badge-paid { background: var(--success-bg); color: var(--success-green); }
+    .badge-overdue { background: var(--danger-bg); color: var(--danger-red); }
+
+    .btn-action {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      cursor: pointer;
+      color: var(--text-dark);
+      transition: all 0.2s;
+    }
+    .btn-action:hover { border-color: var(--primary-lilac); color: var(--primary-lilac); background: var(--light-lilac); }
+
+    /* Toast */
+    #toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--primary-lilac);
+      border-radius: 10px;
+      padding: 14px 20px;
+      box-shadow: 0 10px 30px rgba(155, 114, 207, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 100;
+      transform: translateY(120%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    #toast-notification.show { transform: translateY(0); }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(45, 38, 56, 0.45);
+      backdrop-filter: blur(3px);
+      display: none; align-items: center; justify-content: center; z-index: 99;
+    }
+    .modal-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      width: 100%; max-width: 520px; padding: 28px;
+      box-shadow: 0 20px 40px rgba(155, 114, 207, 0.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-title { font-size: 18px; font-weight: 700; color: var(--text-dark); }
+    .modal-close { cursor: pointer; font-size: 20px; color: var(--text-muted); border: none; background: none; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-color);
+      border-radius: 8px; font-size: 13px; outline: none; background: #faf8fd;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--primary-lilac); background: #fff; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside>
+    <div class="brand">
+      <div class="logo-mark"><div class="logo-mark-inner"></div></div>
+      <div class="brand-name">Brightloop</div>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item active" onclick="switchTab('tab-dashboard')"><span class="icon">📊</span> Executive Overview</li>
+      <li class="nav-item" onclick="switchTab('tab-subscriptions')"><span class="icon">🔄</span> Subscriptions & Quotes</li>
+      <li class="nav-item" onclick="switchTab('tab-products')"><span class="icon">📦</span> Products & Variants</li>
+      <li class="nav-item" onclick="switchTab('tab-invoices')"><span class="icon">🧾</span> Invoices & Billing</li>
+      <li class="nav-item" onclick="switchTab('tab-discounts')"><span class="icon">🏷️</span> Discounts & Taxes</li>
+    </ul>
+
+    <div class="user-profile-widget">
+      <div class="avatar" id="current-avatar">AD</div>
+      <div class="user-info">
+        <div class="user-name" id="current-user-name">Sarah Jenkins</div>
+        <div class="user-role-badge" id="current-user-role">ADMIN</div>
+      </div>
+      <a href="login.html" title="Sign Out" style="text-decoration: none; font-size: 16px;">🚪</a>
+    </div>
+  </aside>
+
+  <!-- Main Work Area -->
+  <main>
+    <div class="top-bar">
+      <div class="page-heading">
+        <h1 id="view-title">Subscription Command Center</h1>
+        <p id="view-subtitle">Monitor recurring revenue, automated billing, and live customer contracts.</p>
+      </div>
+
+      <div class="top-actions">
+        <label for="roleSelector" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">View As:</label>
+        <select id="roleSelector" class="role-switcher-select" onchange="switchRole(this.value)">
+          <option value="ADMIN">Admin (Full Control)</option>
+          <option value="STAFF">Internal Staff (Sales/Billing)</option>
+          <option value="CUSTOMER">Customer Portal</option>
+        </select>
+
+        <button class="btn btn-simulator" onclick="simulateBillingDay()">
+          <span>⚡</span> Simulate Billing Day (+30 Days)
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. TAB: EXECUTIVE OVERVIEW (Finance Lead Requirements) -->
+    <section id="tab-dashboard">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-title">Monthly Recurring Revenue (MRR)</span>
+          <span class="metric-value" id="kpi-mrr">$42,850</span>
+          <span class="metric-footer footer-green">▲ +14.2% from last cycle</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-title">Active Subscriptions</span>
+          <span class="metric-value" id="kpi-active-subs">128</span>
+          <span class="metric-footer footer-purple">● 94% retention rate</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-title">Cash Collected (This Cycle)</span>
+          <span class="metric-value" id="kpi-collected">$36,400</span>
+          <span class="metric-footer footer-green">✓ 85% paid on time</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-title">Overdue Receivables</span>
+          <span class="metric-value" id="kpi-overdue" style="color: var(--danger-red);">$6,450</span>
+          <span class="metric-footer footer-red">! 4 invoices need chasing</span>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Recent Subscriptions Due for Billing</h2>
+          <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Engine Latency: <strong style="color: var(--success-green);">&lt; 38ms</strong></span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Sub Number</th>
+              <th>Customer</th>
+              <th>Plan</th>
+              <th>Next Billing</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-subs-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. TAB: SUBSCRIPTIONS & QUOTATIONS (CPQ Flow) -->
+    <section id="tab-subscriptions" class="hidden">
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Subscriptions & Sales Quotations</h2>
+          <div style="display:flex; gap:10px;">
+            <input type="text" class="input-search" placeholder="Search customer or ID..." onkeyup="filterSubscriptions(this.value)" />
+            <button class="btn btn-primary" onclick="openNewQuoteModal()">+ Create Quotation</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Plan & Variant</th>
+              <th>Cycle</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Lifecycle Action</th>
+            </tr>
+          </thead>
+          <tbody id="all-subs-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. TAB: PRODUCTS & VARIANTS (Admin Catalog) -->
+    <section id="tab-products" class="hidden">
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Product Catalog & Brand Variants</h2>
+          <button class="btn btn-primary" id="btn-add-product" onclick="showToast('Admin: Product creation editor ready.')">+ Add New Product</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Type</th>
+              <th>Sales Price</th>
+              <th>Cost Price</th>
+              <th>Variant Surcharges</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Brightloop Enterprise Suite</strong></td>
+              <td>Software</td>
+              <td>$240.00 / seat</td>
+              <td>$45.00</td>
+              <td><span class="user-role-badge">Odoo Brand: +$60.00</span></td>
+              <td><span class="status-badge badge-active">Available</span></td>
+            </tr>
+            <tr>
+              <td><strong>Cloud Storage Add-On (1TB)</strong></td>
+              <td>Add-On</td>
+              <td>$50.00 / mo</td>
+              <td>$12.00</td>
+              <td>Standard</td>
+              <td><span class="status-badge badge-active">Available</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. TAB: INVOICES & BILLING (The Recurring Engine) -->
+    <section id="tab-invoices" class="hidden">
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Generated Invoices & Ledger</h2>
+          <button class="btn btn-secondary" onclick="runBillingDayBatch()">⚡ Run Billing Day Batch</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>Customer</th>
+              <th>Issued</th>
+              <th>Due Date</th>
+              <th>Tax (18%)</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="invoices-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. TAB: DISCOUNTS & TAXES -->
+    <section id="tab-discounts" class="hidden">
+      <div class="content-card">
+        <div class="card-header">
+          <h2 class="card-title">Active Discount Rules</h2>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Rule Name</th>
+              <th>Type</th>
+              <th>Value</th>
+              <th>Eligibility</th>
+              <th>Usage Count</th>
+              <th>Auto-Expiry</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Enterprise Volume Deal</strong></td>
+              <td>Percentage</td>
+              <td>20% OFF</td>
+              <td>Min. 25 Seats</td>
+              <td>4 / 10 used</td>
+              <td>Expires Dec 31, 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: Create New Quotation -->
+  <div class="modal-overlay" id="quote-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Sales Quotation</h3>
+        <button class="modal-close" onclick="closeModal('quote-modal')">&times;</button>
+      </div>
+      <form onsubmit="handleCreateQuotation(event)">
+        <div class="form-group">
+          <label>Customer Company Name</label>
+          <input type="text" id="quote-customer" placeholder="e.g. Apex Global Logistics" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product & Plan</label>
+            <select id="quote-plan" onchange="recalculateQuotePrice()">
+              <option value="Enterprise Suite" data-price="240">Enterprise Suite ($240/mo)</option>
+              <option value="Storage Add-On" data-price="50">Storage Add-On ($50/mo)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Brand Variant</label>
+            <select id="quote-variant" onchange="recalculateQuotePrice()">
+              <option value="Standard" data-surcharge="0">Standard Brand (+$0)</option>
+              <option value="Odoo" data-surcharge="60">Odoo Brand (+$60/seat)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Number of Seats</label>
+            <input type="number" id="quote-qty" value="5" min="1" oninput="recalculateQuotePrice()" required />
+          </div>
+          <div class="form-group">
+            <label>Billing Cycle</label>
+            <select id="quote-cycle">
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly (10% off)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Estimated Total</label>
+          <div style="font-size: 20px; font-weight: 700; color: var(--primary-lilac);" id="quote-total-preview">$1,500.00 / mo</div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Save as Quotation</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Record Payment -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Record Payment Receipt</h3>
+        <button class="modal-close" onclick="closeModal('payment-modal')">&times;</button>
+      </div>
+      <form onsubmit="handleRecordPayment(event)">
+        <input type="hidden" id="pay-inv-id" />
+        <div class="form-group">
+          <label>Invoice Number</label>
+          <input type="text" id="pay-inv-num" readonly />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="pay-method">
+              <option value="Bank Transfer">Bank Wire Transfer</option>
+              <option value="Stripe">Stripe / Credit Card</option>
+              <option value="Check">Check / Draft</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount Received ($)</label>
+            <input type="number" id="pay-amount" step="0.01" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Transaction Reference</label>
+          <input type="text" id="pay-ref" placeholder="e.g. WIRE-8849204" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Mark Invoice as Paid</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification">
+    <span style="font-size: 18px;">✨</span>
+    <span id="toast-text">System Updated</span>
+  </div>
+
+  <script>
+    let subscriptions = [
+      { id: "SUB-001", customer: "Acme Logistics Corp", plan: "Enterprise Suite (Odoo)", cycle: "Monthly", amount: 1500, nextBill: "2026-11-01", status: "ACTIVE" },
+      { id: "SUB-002", customer: "PixelCraft Media", plan: "Cloud Storage Add-On", cycle: "Monthly", amount: 120, nextBill: "2026-11-03", status: "ACTIVE" },
+      { id: "SUB-003", customer: "FinScale Advisors", plan: "Enterprise Suite", cycle: "Yearly", amount: 3200, nextBill: "2026-11-15", status: "CONFIRMED" },
+      { id: "SUB-004", customer: "Horizon Biotech Ltd", plan: "Enterprise Suite (Odoo)", cycle: "Monthly", amount: 2400, nextBill: "2026-10-28", status: "QUOTATION" }
+    ];
+
+    let invoices = [
+      { id: "INV-1001", subId: "SUB-001", customer: "Acme Logistics Corp", issued: "2026-10-01", due: "2026-10-15", tax: 270, total: 1770, status: "PAID" },
+      { id: "INV-1002", subId: "SUB-002", customer: "PixelCraft Media", issued: "2026-10-03", due: "2026-10-18", tax: 21.6, total: 141.6, status: "PAID" }
+    ];
+
+    function renderSubscriptions() {
+      const dashTbody = document.getElementById('dashboard-subs-table');
+      const allTbody = document.getElementById('all-subs-table');
+      dashTbody.innerHTML = '';
+      allTbody.innerHTML = '';
+
+      subscriptions.forEach(sub => {
+        const badgeClass = `badge-${sub.status.toLowerCase()}`;
+        dashTbody.innerHTML += `
+          <tr>
+            <td><strong>${sub.id}</strong></td>
+            <td>${sub.customer}</td>
+            <td>${sub.plan}</td>
+            <td>${sub.nextBill}</td>
+            <td><span class="status-badge ${badgeClass}">${sub.status}</span></td>
+            <td><button class="btn-action" onclick="switchTab('tab-subscriptions')">Inspect</button></td>
+          </tr>
+        `;
+
+        let actionBtn = '';
+        if (sub.status === 'QUOTATION') actionBtn = `<button class="btn-action" onclick="advanceSubStatus('${sub.id}', 'CONFIRMED')">Confirm Quote</button>`;
+        else if (sub.status === 'CONFIRMED') actionBtn = `<button class="btn-action" onclick="advanceSubStatus('${sub.id}', 'ACTIVE')">Activate</button>`;
+        else if (sub.status === 'ACTIVE') actionBtn = `<button class="btn-action" style="color:var(--danger-red)" onclick="advanceSubStatus('${sub.id}', 'CLOSED')">Close</button>`;
+        else actionBtn = `<span style="font-size:11px;color:var(--text-muted)">Archived</span>`;
+
+        allTbody.innerHTML += `
+          <tr>
+            <td><strong>${sub.id}</strong></td>
+            <td>${sub.customer}</td>
+            <td>${sub.plan}</td>
+            <td>${sub.cycle}</td>
+            <td>$${sub.amount.toLocaleString()}</td>
+            <td><span class="status-badge ${badgeClass}">${sub.status}</span></td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderInvoices() {
+      const tbody = document.getElementById('invoices-table');
+      tbody.innerHTML = '';
+      invoices.forEach(inv => {
+        const badgeClass = `badge-${inv.status.toLowerCase()}`;
+        let action = inv.status !== 'PAID' 
+          ? `<button class="btn-action" onclick="openPaymentModal('${inv.id}', '${inv.total}')">Record Payment</button>`
+          : `<button class="btn-action" onclick="alert('Printing PDF for ${inv.id}...')">Print PDF</button>`;
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${inv.id}</strong></td>
+            <td>${inv.customer}</td>
+            <td>${inv.issued}</td>
+            <td>${inv.due}</td>
+            <td>$${inv.tax.toFixed(2)}</td>
+            <td><strong>$${inv.total.toFixed(2)}</strong></td>
+            <td><span class="status-badge ${badgeClass}">${inv.status}</span></td>
+            <td>${action}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.getElementById(tabId).classList.remove('hidden');
+      const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(el => el.getAttribute('onclick')?.includes(tabId));
+      if (activeNav) activeNav.classList.add('active');
+    }
+
+    function switchRole(role) {
+      const roleBadge = document.getElementById('current-user-role');
+      const userName = document.getElementById('current-user-name');
+      const avatar = document.getElementById('current-avatar');
+      const btnAddProduct = document.getElementById('btn-add-product');
+
+      if (role === 'ADMIN') {
+        userName.textContent = 'Sarah Jenkins'; roleBadge.textContent = 'ADMIN'; avatar.textContent = 'SJ';
+        if (btnAddProduct) btnAddProduct.style.display = 'inline-flex';
+        showToast('Switched to Admin Role');
+      } else if (role === 'STAFF') {
+        userName.textContent = 'David Miller (Sales)'; roleBadge.textContent = 'STAFF'; avatar.textContent = 'DM';
+        if (btnAddProduct) btnAddProduct.style.display = 'none';
+        showToast('Switched to Staff Role');
+      } else {
+        userName.textContent = 'Acme Logistics Rep'; roleBadge.textContent = 'CUSTOMER'; avatar.textContent = 'AL';
+        if (btnAddProduct) btnAddProduct.style.display = 'none';
+        showToast('Switched to Customer View');
+      }
+    }
+
+    function recalculateQuotePrice() {
+      const planSelect = document.getElementById('quote-plan');
+      const variantSelect = document.getElementById('quote-variant');
+      const qty = parseInt(document.getElementById('quote-qty').value) || 1;
+      const base = parseFloat(planSelect.options[planSelect.selectedIndex].getAttribute('data-price'));
+      const surcharge = parseFloat(variantSelect.options[variantSelect.selectedIndex].getAttribute('data-surcharge'));
+      const total = (base + surcharge) * qty;
+      document.getElementById('quote-total-preview').textContent = `$${total.toLocaleString()}.00 / mo`;
+    }
+
+    function handleCreateQuotation(e) {
+      e.preventDefault();
+      const customer = document.getElementById('quote-customer').value;
+      const plan = document.getElementById('quote-plan').value;
+      const variant = document.getElementById('quote-variant').value;
+      const qty = parseInt(document.getElementById('quote-qty').value);
+      const cycle = document.getElementById('quote-cycle').value;
+      const base = parseFloat(document.getElementById('quote-plan').selectedOptions[0].getAttribute('data-price'));
+      const surcharge = parseFloat(document.getElementById('quote-variant').selectedOptions[0].getAttribute('data-surcharge'));
+      const amount = (base + surcharge) * qty;
+      const newId = `SUB-00${subscriptions.length + 1}`;
+
+      subscriptions.push({ id: newId, customer, plan: `${plan} (${variant})`, cycle, amount, nextBill: "2026-11-01", status: "QUOTATION" });
+      closeModal('quote-modal');
+      renderSubscriptions();
+      showToast(`Quotation ${newId} created!`);
+    }
+
+    function advanceSubStatus(id, newStatus) {
+      const sub = subscriptions.find(s => s.id === id);
+      if (sub) {
+        sub.status = newStatus;
+        renderSubscriptions();
+        showToast(`Subscription ${id} is now ${newStatus}`);
+      }
+    }
+
+    function runBillingDayBatch() {
+      let count = 0;
+      subscriptions.filter(s => s.status === 'ACTIVE').forEach(sub => {
+        const alreadyBilled = invoices.some(i => i.subId === sub.id && i.issued === "2026-10-31");
+        if (!alreadyBilled) {
+          const tax = sub.amount * 0.18;
+          invoices.unshift({
+            id: `INV-${1000 + invoices.length + 1}`,
+            subId: sub.id, customer: sub.customer, issued: "2026-10-31", due: "2026-11-14",
+            tax: tax, total: sub.amount + tax, status: "CONFIRMED"
+          });
+          count++;
+        }
+      });
+      renderInvoices();
+      showToast(`Generated ${count} invoices with 0 double-billing.`);
+    }
+
+    function openPaymentModal(invId, amount) {
+      document.getElementById('pay-inv-id').value = invId;
+      document.getElementById('pay-inv-num').value = invId;
+      document.getElementById('pay-amount').value = parseFloat(amount).toFixed(2);
+      document.getElementById('payment-modal').style.display = 'flex';
+    }
+
+    function handleRecordPayment(e) {
+      e.preventDefault();
+      const invId = document.getElementById('pay-inv-id').value;
+      const inv = invoices.find(i => i.id === invId);
+      if (inv) {
+        inv.status = 'PAID';
+        renderInvoices();
+        closeModal('payment-modal');
+        showToast(`Payment registered for ${invId}!`);
+      }
+    }
+
+    function simulateBillingDay() {
+      showToast('⚡ Advancing date by 30 days... Running billing cycle!');
+      setTimeout(() => {
+        runBillingDayBatch();
+        document.getElementById('kpi-mrr').textContent = '$48,200';
+        document.getElementById('kpi-active-subs').textContent = '132';
+        document.getElementById('kpi-collected').textContent = '$44,900';
+        document.getElementById('kpi-overdue').textContent = '$2,100';
+        showToast('✓ Billing cycle executed! Invoices and MRR updated.');
+      }, 700);
+    }
+
+    function openNewQuoteModal() { recalculateQuotePrice(); document.getElementById('quote-modal').style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notification');
+      document.getElementById('toast-text').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    function filterSubscriptions(q) {
+      document.querySelectorAll('#all-subs-table tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+      });
+    }
+
+    renderSubscriptions();
+    renderInvoices();
+  </script>
+</body>
+</html>
