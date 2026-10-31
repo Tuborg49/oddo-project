@@ -1,0 +1,80 @@
+export const initialCustomers = [
+  {
+    id: 'cust-01',
+    name: 'Acme Cloud Technologies',
+    contactPerson: 'David Miller',
+    email: 'david@acmecloud.com',
+    phone: '+1 (555) 234-8901',
+    country: 'United States',
+    industry: 'Cloud Infrastructure',
+    activePlan: 'Enterprise Ultra',
+    mrr: 249.00,
+    status: 'Active',
+    joinedDate: '2024-02-14'
+  },
+  {
+    id: 'cust-02',
+    name: 'Nordic FinTech Labs',
+    contactPerson: 'Astrid Lind',
+    email: 'astrid@nordicfin.se',
+    phone: '+46 8 123 4567',
+    country: 'Sweden',
+    industry: 'Financial Technology',
+    activePlan: 'Professional Plan',
+    mrr: 89.00,
+    status: 'Active',
+    joinedDate: '2024-04-19'
+  },
+  {
+    id: 'cust-03',
+    name: 'Quantum Health Systems',
+    contactPerson: 'Dr. Robert Chen',
+    email: 'robert@quantumhealth.io',
+    phone: '+1 (555) 456-7890',
+    country: 'Canada',
+    industry: 'Healthcare SaaS',
+    activePlan: 'Professional Plan',
+    mrr: 89.00,
+    status: 'Active',
+    joinedDate: '2024-05-30'
+  },
+  {
+    id: 'cust-04',
+    name: 'HyperScale Media UK',
+    contactPerson: 'Emma Watson',
+    email: 'emma@hyperscale.co.uk',
+    phone: '+44 20 7946 0912',
+    country: 'United Kingdom',
+    industry: 'Digital Streaming',
+    activePlan: 'Enterprise Ultra',
+    mrr: 249.00,
+    status: 'Active',
+    joinedDate: '2024-07-11'
+  },
+  {
+    id: 'cust-05',
+    name: 'Solaris Energy Software',
+    contactPerson: 'Marcus Vance',
+    email: 'marcus@solaris-energy.de',
+    phone: '+49 30 901820',
+    country: 'Germany',
+    industry: 'CleanTech',
+    activePlan: 'Starter Plan',
+    mrr: 29.00,
+    status: 'Pending',
+    joinedDate: '2024-09-05'
+  },
+  {
+    id: 'cust-06',
+    name: 'Apex Robotics Corp',
+    contactPerson: 'Siddharth Rao',
+    email: 'siddharth@apexrobotics.in',
+    phone: '+91 98765 43210',
+    country: 'India',
+    industry: 'Industrial IoT',
+    activePlan: 'Starter Plan',
+    mrr: 29.00,
+    status: 'Churned',
+    joinedDate: '2024-01-10'
+  }
+];
